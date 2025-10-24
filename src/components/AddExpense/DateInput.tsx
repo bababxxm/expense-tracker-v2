@@ -1,5 +1,21 @@
 import { DatePicker } from "../ui/datePicker";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function DateInput() {
-  return <DatePicker />;
+  const dispatch = useDispatch();
+  const dateValue = useSelector((state: any) => state.expense.expenseItem.date);
+
+  const handleDateChange = (date: Date) => {
+    dispatch({
+      type: "expense/inputExpenseItem",
+      payload: { key: "date", data: date.toISOString() },
+    });
+  };
+
+  return (
+    <DatePicker
+      selectedDate={new Date(dateValue)}
+      selectHandler={handleDateChange}
+    />
+  );
 }

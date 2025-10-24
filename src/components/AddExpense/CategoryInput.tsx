@@ -1,3 +1,4 @@
+import { useDispatch, useSelector } from "react-redux";
 import {
   Select,
   SelectTrigger,
@@ -6,16 +7,32 @@ import {
   SelectItem,
 } from "../ui/select";
 
+const categories = ["food", "travel", "rent", "bills", "shopping", "savings", "others"];
+
 export default function CategoryInput() {
+  const dispatch = useDispatch();
+  const categoryValue = useSelector(
+    (state: any) => state.expense.expenseItem.category
+  );
   return (
-    <Select>
+    <Select
+      value={categoryValue}
+      onValueChange={(value) =>
+        dispatch({
+          type: "expense/inputExpenseItem",
+          payload: { key: "category", data: value },
+        })
+      }
+    >
       <SelectTrigger className="w-[200px]">
-        <SelectValue placeholder="Type" />
+        <SelectValue placeholder="Category" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="Food">Food</SelectItem>
-        <SelectItem value="Bills">Bills</SelectItem>
-        <SelectItem value="Others">Others</SelectItem>
+        {categories.map((category) => (
+          <SelectItem key={category} value={category}>
+            {category.charAt(0).toUpperCase() + category.slice(1)}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );
