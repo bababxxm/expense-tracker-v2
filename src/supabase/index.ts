@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { v4 as uuidv4 } from "uuid";
+import { UUIDTypes, v4 as uuidv4 } from "uuid";
 import { ExpenseItem, ExpenseData } from "@/slice/expenseSlice";
 
 const supabaseUrl = import.meta.env.VITE_PUBLIC_SUPABASE_URL!;
@@ -30,4 +30,16 @@ export const insertExpense = async (expense: ExpenseItem) => {
     return null;
   }
   return payload;
+};
+
+export const deleteExpense = async (expenseId: UUIDTypes) => {
+  const { error } = await supabase
+    .from("expenses")
+    .delete()
+    .eq("id", expenseId);
+  if (error) {
+    console.error("Error deleting expense:", error);
+    return false;
+  }
+  return true;
 };
