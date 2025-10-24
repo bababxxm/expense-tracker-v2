@@ -1,10 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getExpenses, insertExpense } from "../supabase";
 import { UUIDTypes } from "uuid";
+import sortedExpense from "@/utils/sortedExpense";
+import formatedDate from "@/utils/formatedDate";
 
 export type ExpenseItem = {
   name: string;
-  price: number;
+  price: number | string;
   category: string;
   date: string;
 };
@@ -22,6 +24,8 @@ interface ExpenseState {
   data: ExpenseData[];
   transformedData: ExpenseData[];
   expenseItem: ExpenseItem;
+  flagSort: string;
+  filterMonth: string;
 }
 
 const initialState: ExpenseState = {
@@ -29,17 +33,18 @@ const initialState: ExpenseState = {
   transformedData: [],
   expenseItem: {
     name: "",
-    price: 0,
+    price: "",
     category: "",
-    date: "2022-09-28",
+    date: formatedDate(new Date().toLocaleDateString()),
   },
+  flagSort: "asc",
+  filterMonth: "0",
 };
 
 export const fetchExpense = createAsyncThunk(
   "expense/fetchExpense",
   async (_payload, thunkAPI) => {
     try {
-      console.log("Fetching expenses from Supabase...");
       const res = await getExpenses();
       if (res.length !== 0) {
         const data = res.map((item: any) => ({
@@ -62,7 +67,6 @@ export const addExpense = createAsyncThunk(
   "expense/addExpense",
   async (payload: ExpenseItem, thunkAPI) => {
     try {
-      console.log("Adding expenses from Supabase...");
       const newExpenseData = await insertExpense(payload);
       return newExpenseData;
     } catch (err: any) {
@@ -85,14 +89,22 @@ export const expenseSlice = createSlice({
     // deleteExpenseData: (state, action: PayloadAction<number>) => {
     //   state.data = state.data.filter((item) => item.id !== action.payload);
     // },
-    sortExpenseData: (state, action: PayloadAction<string>) => {
-      const cpyData = [...state.data];
-      cpyData.sort((a, b) => {
-        return action.payload === "asc"
-          ? a.date.localeCompare(b.date)
-          : b.date.localeCompare(a.date);
-      });
-      state.transformedData = cpyData;
+    sortExpenseData: (state, action: PayloadAction<{ value: string }>) => {
+      state.flagSort = action.payload.value;
+      const sortedData = sortedExpense(state.data, action.payload.value);
+      state.transformedData = sortedData;
+    },
+    filterByMonth: (state, action: PayloadAction<string>) => {
+      state.filterMonth = action.payload;
+      if (action.payload === "0") {
+        state.transformedData = sortedExpense(state.data, state.flagSort);
+      } else {
+        const filteredData = state.data.filter((item) => {
+          const itemDate = new Date(item.date);
+          return itemDate.getMonth() + 1 === +action.payload;
+        });
+        state.transformedData = sortedExpense(filteredData, state.flagSort);
+      }
     },
   },
   extraReducers: (builder) => {
@@ -113,17 +125,18 @@ export const expenseSlice = createSlice({
         state.transformedData = [];
         console.error("Error fetching expenses:", action.payload);
       });
-      
-    builder
-      .addCase(
-        addExpense.fulfilled,
-        (state, action: PayloadAction<ExpenseData | null>) => {
-          if (action.payload) {
-            state.data.push(action.payload);
-            state.transformedData.push(action.payload);
-          }
+
+    builder.addCase(
+      addExpense.fulfilled,
+      (state, action: PayloadAction<ExpenseData | null>) => {
+        if (action.payload) {
+          state.data.push(action.payload);
+          state.filterMonth = "0";
+          const sortedData = sortedExpense(state.data, state.flagSort);
+          state.transformedData = sortedData;
         }
-      )
+      }
+    );
   },
 });
 

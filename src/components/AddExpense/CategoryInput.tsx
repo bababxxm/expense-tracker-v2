@@ -7,7 +7,15 @@ import {
   SelectItem,
 } from "../ui/select";
 
-const categories = ["food", "travel", "rent", "bills", "shopping", "savings", "others"];
+const categories = [
+  "food",
+  "travel",
+  "rent",
+  "bills",
+  "shopping",
+  "savings",
+  "others",
+];
 
 export default function CategoryInput() {
   const dispatch = useDispatch();
@@ -17,12 +25,12 @@ export default function CategoryInput() {
   return (
     <Select
       value={categoryValue}
-      onValueChange={(value) =>
-        dispatch({
-          type: "expense/inputExpenseItem",
-          payload: { key: "category", data: value },
-        })
-      }
+      onValueChange={(value) => {
+          dispatch({
+            type: "expense/inputExpenseItem",
+            payload: { key: "category", data: value == "" ? "others" : value },
+          });
+      }}
     >
       <SelectTrigger className="w-[200px]">
         <SelectValue placeholder="Category" />

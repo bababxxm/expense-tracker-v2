@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Select,
   SelectTrigger,
@@ -10,7 +9,7 @@ import {
 
 export default function SortExpense() {
   const dispatch = useDispatch();
-  const [flagSort, setFlagSort] = useState<string>("asc");
+  const flagSort = useSelector((state: any) => state.expense.flagSort);
 
   return (
     <div className="flex flex-row gap-4 items-center">
@@ -18,14 +17,13 @@ export default function SortExpense() {
       <Select
         value={flagSort}
         onValueChange={(value) => {
-		  setFlagSort(value);
-		  dispatch({
-			type: "expense/sortExpenseData",
-			payload: value,
-		  });
-		}}
+          dispatch({
+            type: "expense/sortExpenseData",
+            payload: { value},
+          });
+        }}
       >
-        <SelectTrigger className="w-[125px]">
+        <SelectTrigger className="w-[140px]">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
