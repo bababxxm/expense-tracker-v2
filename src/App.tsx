@@ -2,6 +2,7 @@ import { Provider } from "react-redux";
 import store from "./store/store";
 import ExpenseHeader from "./components/ExpenseHeader";
 import AddExpense from "./components/AddExpense";
+import ExpenseTable from "./components/ExpenseTable";
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
           <ExpenseHeader />
           <AddExpense />
           <br></br>
-          {/* <ExpenseTable /> */}
+          <ExpenseTable />
           <br></br>
         </div>
       </div>
