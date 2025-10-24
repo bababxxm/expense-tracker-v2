@@ -4,6 +4,7 @@ import ExpenseHeader from "./components/ExpenseHeader";
 import AddExpense from "./components/AddExpense";
 import ExpenseTable from "./components/ExpenseTable";
 import ExpenseTableToolBar from "./components/ExpenseToolBar";
+import ExpenseDashboard from "./components/ExpenseDashboard";
 
 function App() {
   return (
@@ -12,10 +13,9 @@ function App() {
         <div className="py-4">
           <ExpenseHeader />
           <AddExpense />
-          <br></br>
           <ExpenseTableToolBar />
           <ExpenseTable />
-          <br></br>
+          <ExpenseDashboard />
         </div>
       </div>
     </Provider>

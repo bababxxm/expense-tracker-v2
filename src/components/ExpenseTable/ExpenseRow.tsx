@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { TableCell, TableRow } from "../ui/table";
 import { ExpenseData, removeExpense } from "@/slice/expenseSlice";
 import CrossIcon from "../icon/CrossIcon";
+import numberToTHB from "@/utils/numberToTHB";
 
 export default function ExpenseRow({ item }: { item: ExpenseData }) {
   const dispatch = useDispatch();
@@ -10,8 +11,12 @@ export default function ExpenseRow({ item }: { item: ExpenseData }) {
     <TableRow>
       <TableCell className="text-center">{item.date}</TableCell>
       <TableCell className="text-center">{item.name}</TableCell>
-      <TableCell className="text-center">{item.category}</TableCell>
-      <TableCell className="text-center">{item.price}</TableCell>
+      <TableCell className="text-center">
+        {item.category.charAt(0).toUpperCase() + item.category.slice(1)}
+      </TableCell>
+      <TableCell className="text-right">
+        {numberToTHB(Number(item.price))}
+      </TableCell>
       <TableCell className="text-center">
         <Button
           className="cursor-pointer"

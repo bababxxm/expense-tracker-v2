@@ -101,18 +101,18 @@ export const expenseSlice = createSlice({
     updateExpenseData: (state, action: PayloadAction<ExpenseData[]>) => {
       state.data = action.payload;
     },
-    // deleteExpenseData: (state, action: PayloadAction<number>) => {
-    //   state.data = state.data.filter((item) => item.id !== action.payload);
-    // },
     sortExpenseData: (state, action: PayloadAction<{ value: string }>) => {
-      const filteredData = state.data.filter((item) => {
-        const itemDate = new Date(item.date);
-        return itemDate.getMonth() + 1 === +state.filterMonth;
-      });
-
       state.flagSort = action.payload.value;
-      const sortedData = sortedExpense(filteredData, action.payload.value);
-      state.transformedData = sortedData;
+      if (state.filterMonth === "0") {
+        state.transformedData = sortedExpense(state.data, state.flagSort);
+      } else {
+        const filteredData = state.data.filter((item) => {
+          const itemDate = new Date(item.date);
+          return itemDate.getMonth() + 1 === +state.filterMonth;
+        });
+        const sortedData = sortedExpense(filteredData, state.flagSort);
+        state.transformedData = sortedData;
+      }
     },
     filterByMonth: (state, action: PayloadAction<string>) => {
       state.filterMonth = action.payload;

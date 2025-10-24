@@ -23,7 +23,7 @@ export default function ExpenseTable() {
   }, []);
 
   return (
-    <div className="flex items-center gap-2 justify-between ">
+    <div className="flex items-center gap-2 justify-between">
       <Table>
         <TableCaption>A list of your expenses.</TableCaption>
         <TableHeader>
@@ -31,7 +31,7 @@ export default function ExpenseTable() {
             <TableHead className="text-center">Date</TableHead>
             <TableHead className="text-center">Name</TableHead>
             <TableHead className="text-center">Category</TableHead>
-            <TableHead className="text-center">Price</TableHead>
+            <TableHead className="text-center w-fit">Price</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
