@@ -178,10 +178,6 @@ export const expenseSlice = createSlice({
   },
 });
 
-export const {
-  inputExpenseItem,
-  updateExpenseData,
-  sortExpenseData,
-  // deleteExpenseData,
-} = expenseSlice.actions;
+export const { inputExpenseItem, updateExpenseData, sortExpenseData } =
+  expenseSlice.actions;
 export default expenseSlice.reducer;
