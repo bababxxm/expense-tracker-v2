@@ -1,11 +1,19 @@
 import { createClient } from "@supabase/supabase-js";
 import { UUIDTypes, v4 as uuidv4 } from "uuid";
-import { ExpenseItem, ExpenseData } from "@/slice/expenseSlice";
+import { ExpenseItem } from "@/slice/expenseSlice";
 
 const supabaseUrl = import.meta.env.VITE_PUBLIC_SUPABASE_URL!;
 const supabaseAPIKey = import.meta.env.VITE_PUBLIC_SUPABASE_API_KEY!;
 
 export const supabase = createClient(supabaseUrl, supabaseAPIKey);
+
+type ExpensePlayload = {
+  id: UUIDTypes;
+  name: string;
+  price: number;
+  category: string;
+  date: string;
+};
 
 export const getExpenses = async () => {
   const { data, error } = await supabase.from("expenses").select("*");
@@ -17,10 +25,10 @@ export const getExpenses = async () => {
 };
 
 export const insertExpense = async (expense: ExpenseItem) => {
-  const payload: ExpenseData = {
+  const payload: ExpensePlayload = {
     id: uuidv4(),
     name: expense.name,
-    price: expense.price,
+    price: parseFloat(expense.price),
     category: expense.category,
     date: expense.date,
   };

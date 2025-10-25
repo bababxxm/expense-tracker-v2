@@ -6,7 +6,7 @@ import formatedDate from "@/utils/formatedDate";
 
 export type ExpenseItem = {
   name: string;
-  price: number | string;
+  price: string;
   category: string;
   date: string;
 };

@@ -31,7 +31,8 @@ export default function ExpenseTable() {
             <TableHead className="text-center">Date</TableHead>
             <TableHead className="text-center">Name</TableHead>
             <TableHead className="text-center">Category</TableHead>
-            <TableHead className="text-center w-fit">Price</TableHead>
+            <TableHead className="text-center">Price</TableHead>
+            <TableHead className="text-center"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
